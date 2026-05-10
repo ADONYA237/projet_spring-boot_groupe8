@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: E-Commerce Core API
-  description: Migration vers PostgreSQL, support multi-catégories et validation camerounaise.
+  title: E-Commerce Core API (Full)
+  description: API complète pour la gestion d'un e-commerce avec PostgreSQL, support multi-catégories et validation camerounaise.
   version: 1.0.0
 
 servers:
@@ -9,9 +9,11 @@ servers:
     description: Serveur de développement
 
 paths:
+  # --- PRODUCTS ---
   /products:
     get:
-      summary: Liste tous les produits (Recherche avancée incluse)
+      tags: [Products]
+      summary: Liste et recherche avancée de produits
       parameters:
         - name: keyword
           in: query
@@ -20,6 +22,7 @@ paths:
             type: string
         - name: category
           in: query
+          description: Nom de la catégorie
           schema:
             type: string
         - name: minPrice
@@ -42,9 +45,10 @@ paths:
             default: 10
       responses:
         '200':
-          description: Succès
+          description: Liste des produits
     post:
-      summary: Créer un produit
+      tags: [Products]
+      summary: Créer un nouveau produit
       requestBody:
         required: true
         content:
@@ -53,11 +57,12 @@ paths:
               $ref: '#/components/schemas/Product'
       responses:
         '201':
-          description: Créé
+          description: Produit créé
 
   /products/{id}:
     get:
-      summary: Obtenir un produit par ID
+      tags: [Products]
+      summary: Obtenir un produit par son ID
       parameters:
         - name: id
           in: path
@@ -66,8 +71,9 @@ paths:
             type: integer
       responses:
         '200':
-          description: Succès
+          description: Détails du produit
     put:
+      tags: [Products]
       summary: Mettre à jour un produit
       parameters:
         - name: id
@@ -83,11 +89,92 @@ paths:
               $ref: '#/components/schemas/Product'
       responses:
         '200':
-          description: Mis à jour
+          description: Produit mis à jour
+    delete:
+      tags: [Products]
+      summary: Supprimer un produit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Produit supprimé
 
-  /users:
+  /products/{id}/variants:
     post:
-      summary: Créer un utilisateur
+      tags: [Products]
+      summary: Ajouter une variante à un produit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductVariant'
+      responses:
+        '200':
+          description: Variante ajoutée
+
+  /products/{id}/comments:
+    post:
+      tags: [Products]
+      summary: Ajouter un commentaire à un produit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '200':
+          description: Commentaire ajouté
+
+  # --- CATEGORIES ---
+  /categories:
+    get:
+      tags: [Categories]
+      summary: Liste toutes les catégories
+      responses:
+        '200':
+          description: Liste des catégories
+    post:
+      tags: [Categories]
+      summary: Créer une nouvelle catégorie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '201':
+          description: Catégorie créée
+
+  # --- USERS ---
+  /users:
+    get:
+      tags: [Users]
+      summary: Liste tous les utilisateurs
+      responses:
+        '200':
+          description: Liste des utilisateurs
+    post:
+      tags: [Users]
+      summary: Créer un nouvel utilisateur (avec validation numéro CM)
       requestBody:
         required: true
         content:
@@ -96,31 +183,100 @@ paths:
               $ref: '#/components/schemas/User'
       responses:
         '201':
-          description: Créé
+          description: Utilisateur créé
+
+  # --- ORDERS ---
+  /orders:
+    post:
+      tags: [Orders]
+      summary: Créer une commande
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: address
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: promoCode
+          in: query
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/OrderItem'
+      responses:
+        '201':
+          description: Commande créée
+
+  /orders/{id}/pay:
+    post:
+      tags: [Orders]
+      summary: Payer une commande
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Commande payée
+
+  /orders/{id}/shipping:
+    patch:
+      tags: [Orders]
+      summary: Mettre à jour le statut de livraison
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: status
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [PENDING, PAID, SHIPPED, DELIVERED]
+      responses:
+        '200':
+          description: Statut mis à jour
+
+  # --- TICKETS ---
+  /tickets:
+    get:
+      tags: [Tickets]
+      summary: Liste tous les tickets de support
+      responses:
+        '200':
+          description: Liste des tickets
+    post:
+      tags: [Tickets]
+      summary: Créer un ticket de support
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ticket'
+      responses:
+        '201':
+          description: Ticket créé
 
 components:
   schemas:
     Product:
       type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        price:
-          type: number
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
-        stockQuantity:
-          type: integer
-        images:
-          type: array
-          items:
-            type: string
-    Category:
-      type: object
+      required: [name, price]
       properties:
         id:
           type: integer
@@ -128,9 +284,73 @@ components:
           type: string
         description:
           type: string
-    User:
+        price:
+          type: number
+        stockQuantity:
+          type: integer
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        images:
+          type: array
+          items:
+            type: string
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductVariant'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+
+    Category:
+      type: object
+      required: [name]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+
+    ProductVariant:
       type: object
       properties:
+        id:
+          type: integer
+        type:
+          type: string
+        value:
+          type: string
+        priceAdjustment:
+          type: number
+
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        content:
+          type: string
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        createdAt:
+          type: string
+          format: date-time
+
+    User:
+      type: object
+      required: [username, email, password]
+      properties:
+        id:
+          type: integer
         username:
           type: string
         email:
@@ -142,3 +362,32 @@ components:
         phoneNumber:
           type: string
           description: Numéro camerounais (+237...)
+
+    OrderItem:
+      type: object
+      required: [productId, quantity]
+      properties:
+        productId:
+          type: integer
+        quantity:
+          type: integer
+        unitPrice:
+          type: number
+
+    Ticket:
+      type: object
+      required: [userId, subject, message]
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        subject:
+          type: string
+        message:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time

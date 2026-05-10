@@ -1,0 +1,144 @@
+openapi: 3.0.0
+info:
+  title: E-Commerce Core API
+  description: Migration vers PostgreSQL, support multi-catégories et validation camerounaise.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8081/api/v1
+    description: Serveur de développement
+
+paths:
+  /products:
+    get:
+      summary: Liste tous les produits (Recherche avancée incluse)
+      parameters:
+        - name: keyword
+          in: query
+          description: Recherche par nom ou description
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: minPrice
+          in: query
+          schema:
+            type: number
+        - name: maxPrice
+          in: query
+          schema:
+            type: number
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Succès
+    post:
+      summary: Créer un produit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Créé
+
+  /products/{id}:
+    get:
+      summary: Obtenir un produit par ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Succès
+    put:
+      summary: Mettre à jour un produit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Mis à jour
+
+  /users:
+    post:
+      summary: Créer un utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Créé
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        stockQuantity:
+          type: integer
+        images:
+          type: array
+          items:
+            type: string
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+        phoneNumber:
+          type: string
+          description: Numéro camerounais (+237...)

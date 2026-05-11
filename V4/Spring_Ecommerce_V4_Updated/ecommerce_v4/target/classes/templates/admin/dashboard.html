@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{admin.dashboard} + ' | AfriShop'">Admin Dashboard - AfriShop</title>
+    <link rel="stylesheet" th:href="@{/css/tailwind-custom.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="flex h-screen bg-light-cream">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-dark-brown text-light-cream shadow-lg">
+            <div class="p-6 border-b border-gray-700">
+                <h1 class="text-2xl font-bold text-primary-gold flex items-center gap-2">
+                    <i class="fas fa-leaf"></i> AfriShop Admin
+                </h1>
+            </div>
+
+            <nav class="p-4 space-y-2">
+                <a th:href="@{/admin}" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-orange text-white transition">
+                    <i class="fas fa-chart-line"></i> <span th:text="#{admin.dashboard}">Dashboard</span>
+                </a>
+                <a th:href="@{/admin/products}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-box"></i> <span th:text="#{admin.products}">Products</span>
+                </a>
+                <a th:href="@{/admin/categories}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-list"></i> <span th:text="#{admin.categories}">Categories</span>
+                </a>
+                <a th:href="@{/admin/orders}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-shopping-cart"></i> <span th:text="#{admin.orders}">Orders</span>
+                </a>
+                <a th:href="@{/admin/users}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-users"></i> <span th:text="#{admin.users}">Users</span>
+                </a>
+                <a th:href="@{/admin/reports}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-chart-bar"></i> <span th:text="#{admin.reports}">Reports</span>
+                </a>
+                <a th:href="@{/admin/settings}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-cog"></i> <span th:text="#{admin.settings}">Settings</span>
+                </a>
+            </nav>
+
+            <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-700 w-64">
+                <div class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-rust text-light-cream">
+                    <i class="fas fa-user-circle text-2xl"></i>
+                    <div class="flex-1">
+                        <p class="font-bold text-sm">Admin User</p>
+                        <p class="text-xs text-warm-beige">admin@afrishop.com</p>
+                    </div>
+                </div>
+                <a th:href="@{/logout}" class="flex items-center gap-3 px-4 py-3 mt-2 rounded-lg text-light-cream hover:bg-primary-orange transition text-sm">
+                    <i class="fas fa-sign-out-alt"></i> <span th:text="#{nav.logout}">Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto">
+            <!-- Top Bar -->
+            <div class="bg-white border-b border-warm-beige p-6 flex-between shadow-sm">
+                <div>
+                    <h1 class="text-3xl font-bold text-primary-orange" th:text="#{admin.dashboard}">Dashboard</h1>
+                    <p class="text-gray-dark text-sm mt-1" th:text="'Welcome back! Today is ' + #dates.format(#dates.createNow(), 'MMMM dd, yyyy')">Welcome back!</p>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <!-- Language Selector -->
+                    <div class="flex gap-2">
+                        <a th:href="@{/admin?lang=en}" class="px-2 py-1 rounded-md text-sm font-medium bg-primary-orange text-white">EN</a>
+                        <a th:href="@{/admin?lang=fr}" class="px-2 py-1 rounded-md text-sm font-medium text-dark-brown hover:bg-warm-beige">FR</a>
+                    </div>
+
+                    <!-- Search -->
+                    <input type="text" placeholder="Search..." class="form-control px-4 py-2 rounded-lg" th:placeholder="#{common.search}">
+                    
+                    <!-- Notifications -->
+                    <button class="relative p-2 text-dark-brown hover:text-primary-orange transition">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="p-6">
+                <!-- Stats Cards -->
+                <div class="grid-4 mb-8">
+                    <!-- Total Sales Card -->
+                    <div class="card p-6 hover:shadow-lg transition">
+                        <div class="flex-between mb-4">
+                            <div>
+                                <p class="text-gray-dark text-sm" th:text="#{admin.total_sales}">Total Sales</p>
+                                <p class="text-3xl font-bold text-primary-orange">$45,230</p>
+                                <p class="text-green-500 text-sm mt-2"><i class="fas fa-arrow-up"></i> +12.5% from last month</p>
+                            </div>
+                            <div class="w-16 h-16 bg-primary-gold rounded-full flex-center">
+                                <i class="fas fa-dollar-sign text-2xl text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Orders Card -->
+                    <div class="card p-6 hover:shadow-lg transition">
+                        <div class="flex-between mb-4">
+                            <div>
+                                <p class="text-gray-dark text-sm" th:text="#{admin.total_orders}">Total Orders</p>
+                                <p class="text-3xl font-bold text-primary-orange">1,234</p>
+                                <p class="text-green-500 text-sm mt-2"><i class="fas fa-arrow-up"></i> +8.2% from last month</p>
+                            </div>
+                            <div class="w-16 h-16 bg-primary-rust rounded-full flex-center">
+                                <i class="fas fa-shopping-cart text-2xl text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Customers Card -->
+                    <div class="card p-6 hover:shadow-lg transition">
+                        <div class="flex-between mb-4">
+                            <div>
+                                <p class="text-gray-dark text-sm" th:text="#{admin.total_customers}">Total Customers</p>
+                                <p class="text-3xl font-bold text-primary-orange">856</p>
+                                <p class="text-green-500 text-sm mt-2"><i class="fas fa-arrow-up"></i> +5.3% from last month</p>
+                            </div>
+                            <div class="w-16 h-16 bg-accent-warm rounded-full flex-center">
+                                <i class="fas fa-users text-2xl text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Orders Card -->
+                    <div class="card p-6 hover:shadow-lg transition">
+                        <div class="flex-between mb-4">
+                            <div>
+                                <p class="text-gray-dark text-sm">Pending Orders</p>
+                                <p class="text-3xl font-bold text-primary-orange">42</p>
+                                <p class="text-orange-500 text-sm mt-2"><i class="fas fa-exclamation-circle"></i> Requires attention</p>
+                            </div>
+                            <div class="w-16 h-16 bg-yellow-500 rounded-full flex-center">
+                                <i class="fas fa-clock text-2xl text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts and Tables Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Sales Chart -->
+                    <div class="card p-6">
+                        <div class="card-header mb-4">
+                            <h3 class="text-lg font-bold text-primary-orange" th:text="#{admin.analytics}">Sales Analytics</h3>
+                        </div>
+                        <div class="h-64 bg-warm-beige rounded-lg flex-center">
+                            <p class="text-gray-dark">Chart placeholder - Integrate with Chart.js</p>
+                        </div>
+                    </div>
+
+                    <!-- Top Products -->
+                    <div class="card p-6">
+                        <div class="card-header mb-4">
+                            <h3 class="text-lg font-bold text-primary-orange">Top Products</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex-between pb-4 border-b border-warm-beige">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://via.placeholder.com/40x40" alt="Product" class="w-10 h-10 rounded">
+                                    <div>
+                                        <p class="font-bold text-sm text-dark-brown">Kente Cloth</p>
+                                        <p class="text-xs text-gray-dark">245 sold</p>
+                                    </div>
+                                </div>
+                                <p class="font-bold text-primary-orange">$11,025</p>
+                            </div>
+                            <div class="flex-between pb-4 border-b border-warm-beige">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://via.placeholder.com/40x40" alt="Product" class="w-10 h-10 rounded">
+                                    <div>
+                                        <p class="font-bold text-sm text-dark-brown">Shea Butter</p>
+                                        <p class="text-xs text-gray-dark">189 sold</p>
+                                    </div>
+                                </div>
+                                <p class="font-bold text-primary-orange">$5,292</p>
+                            </div>
+                            <div class="flex-between">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://via.placeholder.com/40x40" alt="Product" class="w-10 h-10 rounded">
+                                    <div>
+                                        <p class="font-bold text-sm text-dark-brown">Beaded Jewelry</p>
+                                        <p class="text-xs text-gray-dark">156 sold</p>
+                                    </div>
+                                </div>
+                                <p class="font-bold text-primary-orange">$5,460</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders Table -->
+                <div class="card p-6">
+                    <div class="card-header mb-6 flex-between">
+                        <h3 class="text-lg font-bold text-primary-orange" th:text="#{admin.recent_orders}">Recent Orders</h3>
+                        <a th:href="@{/admin/orders}" class="btn-secondary text-sm">View All</a>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b-2 border-warm-beige">
+                                    <th class="text-left py-3 px-4 font-bold text-dark-brown">Order ID</th>
+                                    <th class="text-left py-3 px-4 font-bold text-dark-brown">Customer</th>
+                                    <th class="text-left py-3 px-4 font-bold text-dark-brown">Amount</th>
+                                    <th class="text-left py-3 px-4 font-bold text-dark-brown">Status</th>
+                                    <th class="text-left py-3 px-4 font-bold text-dark-brown">Date</th>
+                                    <th class="text-left py-3 px-4 font-bold text-dark-brown">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-warm-beige hover:bg-light-cream transition">
+                                    <td class="py-3 px-4 text-dark-brown font-bold">#ORD-001</td>
+                                    <td class="py-3 px-4 text-gray-dark">John Smith</td>
+                                    <td class="py-3 px-4 text-primary-orange font-bold">$245.50</td>
+                                    <td class="py-3 px-4">
+                                        <span class="badge badge-success">Delivered</span>
+                                    </td>
+                                    <td class="py-3 px-4 text-gray-dark text-sm">2024-05-10</td>
+                                    <td class="py-3 px-4">
+                                        <a href="#" class="text-primary-orange hover:text-primary-rust transition">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-warm-beige hover:bg-light-cream transition">
+                                    <td class="py-3 px-4 text-dark-brown font-bold">#ORD-002</td>
+                                    <td class="py-3 px-4 text-gray-dark">Sarah Johnson</td>
+                                    <td class="py-3 px-4 text-primary-orange font-bold">$156.75</td>
+                                    <td class="py-3 px-4">
+                                        <span class="badge badge-warning">Processing</span>
+                                    </td>
+                                    <td class="py-3 px-4 text-gray-dark text-sm">2024-05-09</td>
+                                    <td class="py-3 px-4">
+                                        <a href="#" class="text-primary-orange hover:text-primary-rust transition">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-warm-beige hover:bg-light-cream transition">
+                                    <td class="py-3 px-4 text-dark-brown font-bold">#ORD-003</td>
+                                    <td class="py-3 px-4 text-gray-dark">Michael Brown</td>
+                                    <td class="py-3 px-4 text-primary-orange font-bold">$389.25</td>
+                                    <td class="py-3 px-4">
+                                        <span class="badge badge-primary">Pending</span>
+                                    </td>
+                                    <td class="py-3 px-4 text-gray-dark text-sm">2024-05-08</td>
+                                    <td class="py-3 px-4">
+                                        <a href="#" class="text-primary-orange hover:text-primary-rust transition">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

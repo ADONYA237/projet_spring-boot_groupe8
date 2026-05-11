@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{admin.users} + ' | AfriShop'">Users Management - AfriShop</title>
+    <link rel="stylesheet" th:href="@{/css/tailwind-custom.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="flex h-screen bg-light-cream">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-dark-brown text-light-cream shadow-lg">
+            <div class="p-6 border-b border-gray-700">
+                <h1 class="text-2xl font-bold text-primary-gold flex items-center gap-2">
+                    <i class="fas fa-leaf"></i> AfriShop Admin
+                </h1>
+            </div>
+
+            <nav class="p-4 space-y-2">
+                <a th:href="@{/admin}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-chart-line"></i> <span th:text="#{admin.dashboard}">Dashboard</span>
+                </a>
+                <a th:href="@{/admin/products}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-box"></i> <span th:text="#{admin.products}">Products</span>
+                </a>
+                <a th:href="@{/admin/categories}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-list"></i> <span th:text="#{admin.categories}">Categories</span>
+                </a>
+                <a th:href="@{/admin/orders}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-shopping-cart"></i> <span th:text="#{admin.orders}">Orders</span>
+                </a>
+                <a th:href="@{/admin/users}" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-orange text-white transition">
+                    <i class="fas fa-users"></i> <span th:text="#{admin.users}">Users</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto">
+            <!-- Top Bar -->
+            <div class="bg-white border-b border-warm-beige p-6 flex-between shadow-sm">
+                <div>
+                    <h1 class="text-3xl font-bold text-primary-orange" th:text="#{admin.users}">Users</h1>
+                    <p class="text-gray-dark text-sm mt-1">Manage customer accounts and permissions</p>
+                </div>
+
+                <button class="btn-primary flex items-center gap-2">
+                    <i class="fas fa-user-plus"></i> <span>Add User</span>
+                </button>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6">
+                <!-- Filters -->
+                <div class="card p-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <input type="text" placeholder="Search users..." class="form-control" th:placeholder="#{common.search}">
+                        <select class="form-control">
+                            <option value="">All Roles</option>
+                            <option value="admin">Admin</option>
+                            <option value="customer">Customer</option>
+                        </select>
+                        <select class="form-control">
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                        <button class="btn-primary" th:text="#{common.filter}">Filter</button>
+                    </div>
+                </div>
+
+                <!-- Users Table -->
+                <div class="card overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="bg-warm-beige border-b-2 border-primary-gold">
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown">
+                                        <input type="checkbox" class="w-4 h-4">
+                                    </th>
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown">User</th>
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown">Email</th>
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown">Role</th>
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown">Status</th>
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown">Joined</th>
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-warm-beige hover:bg-light-cream transition" th:each="user : ${users}">
+                                    <td class="py-4 px-6">
+                                        <input type="checkbox" class="w-4 h-4">
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-full bg-primary-gold flex-center text-white font-bold">
+                                                <span th:text="${user.firstName.charAt(0)}">J</span>
+                                            </div>
+                                            <div>
+                                                <p class="font-bold text-dark-brown" th:text="${user.firstName} + ' ' + ${user.lastName}">John Smith</p>
+                                                <p class="text-xs text-gray-dark" th:text="${user.phone}">+237 6XX XXX XXX</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6 text-gray-dark" th:text="${user.email}">john@example.com</td>
+                                    <td class="py-4 px-6">
+                                        <span class="badge badge-primary" th:text="${user.role}">Customer</span>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="badge badge-success" th:if="${user.active}">Active</span>
+                                        <span class="badge badge-warning" th:unless="${user.active}">Inactive</span>
+                                    </td>
+                                    <td class="py-4 px-6 text-gray-dark text-sm" th:text="${#dates.format(user.createdDate, 'yyyy-MM-dd')}">2024-01-15</td>
+                                    <td class="py-4 px-6">
+                                        <div class="flex gap-2">
+                                            <a th:href="@{/admin/users/{id}(id=${user.id})}" class="text-primary-orange hover:text-primary-rust transition" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button class="text-red-500 hover:text-red-700 transition" title="Delete">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="bg-warm-beige p-4 flex-between">
+                        <p class="text-sm text-gray-dark">Showing <span class="font-bold">1-10</span> of <span class="font-bold">234</span> users</p>
+                        <div class="pagination">
+                            <a href="#" class="hover:bg-primary-orange hover:text-white">&laquo;</a>
+                            <a href="#" class="active">1</a>
+                            <a href="#" class="hover:bg-primary-orange hover:text-white">2</a>
+                            <a href="#" class="hover:bg-primary-orange hover:text-white">3</a>
+                            <a href="#" class="hover:bg-primary-orange hover:text-white">&raquo;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{nav.shop} + ' | AfriShop'">Shop - AfriShop</title>
+    <link rel="stylesheet" th:href="@{/css/tailwind-custom.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container-custom flex-between py-4">
+            <div class="flex-center gap-8">
+                <a th:href="@{/}" class="navbar-brand"><i class="fas fa-leaf"></i> AfriShop</a>
+                <div class="hidden md:flex gap-6">
+                    <a th:href="@{/}" class="nav-link" th:text="#{nav.home}">Home</a>
+                    <a th:href="@{/shop}" class="nav-link active" th:text="#{nav.shop}">Shop</a>
+                    <a th:href="@{/about}" class="nav-link" th:text="#{nav.about}">About</a>
+                    <a th:href="@{/contact}" class="nav-link" th:text="#{nav.contact}">Contact</a>
+                </div>
+            </div>
+            
+            <div class="flex-center gap-4">
+                <div class="flex gap-2">
+                    <a th:href="@{/shop?lang=en}" class="px-2 py-1 rounded-md text-sm font-medium bg-primary-orange text-white">EN</a>
+                    <a th:href="@{/shop?lang=fr}" class="px-2 py-1 rounded-md text-sm font-medium text-dark-brown hover:bg-warm-beige">FR</a>
+                </div>
+                
+                <form th:action="@{/shop}" method="get" class="hidden md:flex">
+                    <input type="text" name="search" placeholder="Search..." class="form-control rounded-l-md" th:placeholder="#{common.search}">
+                    <button type="submit" class="btn-primary rounded-r-md rounded-l-none"><i class="fas fa-search"></i></button>
+                </form>
+                
+                <a th:href="@{/cart}" class="relative">
+                    <i class="fas fa-shopping-cart text-2xl text-primary-orange"></i>
+                    <span class="absolute -top-2 -right-2 bg-primary-orange text-white text-xs rounded-full w-5 h-5 flex-center cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="bg-warm-beige py-4">
+        <div class="container-custom">
+            <nav class="flex gap-2 text-sm">
+                <a th:href="@{/}" class="text-primary-orange hover:text-primary-rust" th:text="#{nav.home}">Home</a>
+                <span class="text-gray-dark">/</span>
+                <span class="text-dark-brown font-bold" th:text="#{nav.shop}">Shop</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container-custom section-padding">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Sidebar Filters -->
+            <aside class="md:col-span-1">
+                <div class="card p-6 mb-6">
+                    <h3 class="text-xl font-bold text-primary-orange mb-4" th:text="#{common.filter}">Filter</h3>
+                    
+                    <!-- Category Filter -->
+                    <div class="mb-6">
+                        <h4 class="font-bold text-dark-brown mb-3">Categories</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="category" value="clothing" class="w-4 h-4">
+                                <span class="text-gray-dark">Clothing</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="category" value="accessories" class="w-4 h-4">
+                                <span class="text-gray-dark">Accessories</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="category" value="home" class="w-4 h-4">
+                                <span class="text-gray-dark">Home & Living</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="category" value="beauty" class="w-4 h-4">
+                                <span class="text-gray-dark">Beauty & Care</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Price Filter -->
+                    <div class="mb-6">
+                        <h4 class="font-bold text-dark-brown mb-3" th:text="#{common.price}">Price</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="price" value="0-25" class="w-4 h-4">
+                                <span class="text-gray-dark">$0 - $25</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="price" value="25-50" class="w-4 h-4">
+                                <span class="text-gray-dark">$25 - $50</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="price" value="50-100" class="w-4 h-4">
+                                <span class="text-gray-dark">$50 - $100</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="price" value="100+" class="w-4 h-4">
+                                <span class="text-gray-dark">$100+</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Rating Filter -->
+                    <div class="mb-6">
+                        <h4 class="font-bold text-dark-brown mb-3">Rating</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="rating" value="5" class="w-4 h-4">
+                                <div class="flex gap-1">
+                                    <i class="fas fa-star text-accent-warm text-sm"></i>
+                                    <i class="fas fa-star text-accent-warm text-sm"></i>
+                                    <i class="fas fa-star text-accent-warm text-sm"></i>
+                                    <i class="fas fa-star text-accent-warm text-sm"></i>
+                                    <i class="fas fa-star text-accent-warm text-sm"></i>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="rating" value="4" class="w-4 h-4">
+                                <div class="flex gap-1">
+                                    <i class="fas fa-star text-accent-warm text-sm"></i>
+                                    <i class="fas fa-star text-accent-warm text-sm"></i>
+                                    <i class="fas fa-star text-accent-warm text-sm"></i>
+                                    <i class="fas fa-star text-accent-warm text-sm"></i>
+                                </div>
+                                <span class="text-gray-dark text-sm">& Up</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="btn-secondary w-full" th:text="#{common.filter}">Filter</button>
+                </div>
+
+                <!-- Featured Products Widget -->
+                <div class="card p-6">
+                    <h3 class="text-lg font-bold text-primary-orange mb-4">Featured</h3>
+                    <div class="space-y-4">
+                        <div class="flex gap-3">
+                            <img src="https://via.placeholder.com/60x60" alt="Product" class="w-16 h-16 rounded-md object-cover">
+                            <div>
+                                <h4 class="font-bold text-sm text-dark-brown">Kente Cloth</h4>
+                                <p class="text-primary-orange font-bold text-sm">$45.00</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <img src="https://via.placeholder.com/60x60" alt="Product" class="w-16 h-16 rounded-md object-cover">
+                            <div>
+                                <h4 class="font-bold text-sm text-dark-brown">Shea Butter</h4>
+                                <p class="text-primary-orange font-bold text-sm">$28.00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Products Grid -->
+            <div class="md:col-span-3">
+                <!-- Sort Bar -->
+                <div class="flex-between mb-8 bg-warm-beige p-4 rounded-lg">
+                    <p class="text-gray-dark">Showing <span class="font-bold">12</span> products</p>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2">
+                            <span class="text-gray-dark" th:text="#{common.sort}">Sort:</span>
+                            <select class="form-control">
+                                <option value="newest">Newest</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="rating">Top Rated</option>
+                                <option value="popular">Most Popular</option>
+                            </select>
+                        </label>
+                        <div class="flex gap-2">
+                            <button class="p-2 bg-white border-2 border-primary-orange rounded-md text-primary-orange hover:bg-primary-orange hover:text-white transition">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                            <button class="p-2 bg-white border-2 border-gray-medium rounded-md text-gray-dark hover:bg-warm-beige transition">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="grid-4">
+                    <!-- Product Card Template (repeat for each product) -->
+                    <div class="product-card fade-in" th:each="product : ${products}">
+                        <div class="relative">
+                            <img th:src="${product.imageUrl}" alt="Product" class="product-image">
+                            <span class="product-badge" th:if="${product.discount}">-<span th:text="${product.discount}">20</span>%</span>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-bold text-dark-brown mb-2" th:text="${product.name}">Product Name</h3>
+                            <p class="text-sm text-gray-dark mb-3" th:text="${product.description}">Product description</p>
+                            <div class="flex-between mb-4">
+                                <div>
+                                    <span class="product-price" th:text="'$' + ${product.price}">$45.00</span>
+                                    <span class="product-old-price ml-2" th:if="${product.originalPrice}" th:text="'$' + ${product.originalPrice}">$56.25</span>
+                                </div>
+                                <div class="flex gap-1">
+                                    <i class="fas fa-star text-accent-warm"></i>
+                                    <i class="fas fa-star text-accent-warm"></i>
+                                    <i class="fas fa-star text-accent-warm"></i>
+                                    <i class="fas fa-star text-accent-warm"></i>
+                                    <i class="fas fa-star-half-alt text-accent-warm"></i>
+                                </div>
+                            </div>
+                            <a th:href="@{/product/{id}(id=${product.id})}" class="btn-outline w-full text-center mb-2">
+                                <i class="fas fa-eye mr-2"></i> <span th:text="#{common.view}">View</span>
+                            </a>
+                            <button class="btn-primary w-full add-to-cart-btn" th:data-product-id="${product.id}" th:text="#{common.add_to_cart}">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination mt-12">
+                    <a href="#" class="hover:bg-primary-orange hover:text-white">&laquo;</a>
+                    <a href="#" class="active">1</a>
+                    <a href="#" class="hover:bg-primary-orange hover:text-white">2</a>
+                    <a href="#" class="hover:bg-primary-orange hover:text-white">3</a>
+                    <a href="#" class="hover:bg-primary-orange hover:text-white">&raquo;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-custom">
+            <div class="grid-4 mb-8">
+                <div class="footer-section">
+                    <h3 th:text="#{footer.about_us}">About Us</h3>
+                    <p class="text-sm mb-4">AfriShop brings you the finest premium African products.</p>
+                </div>
+                <div class="footer-section">
+                    <h3 th:text="#{nav.shop}">Shop</h3>
+                    <a th:href="@{/shop}" class="footer-link" th:text="#{nav.shop}">Shop</a>
+                </div>
+                <div class="footer-section">
+                    <h3 th:text="#{nav.contact}">Support</h3>
+                    <a th:href="@{/contact}" class="footer-link" th:text="#{footer.contact_us}">Contact Us</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <a href="#" class="footer-link" th:text="#{footer.privacy_policy}">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8 text-center text-sm text-light-cream">
+                <p th:text="'© 2024 AfriShop. ' + #{footer.copyright}">© 2024 AfriShop. All rights reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

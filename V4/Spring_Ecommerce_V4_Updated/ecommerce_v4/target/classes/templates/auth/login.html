@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{auth.login} + ' | AfriShop'">Login - AfriShop</title>
+    <link rel="stylesheet" th:href="@{/css/tailwind-custom.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light-cream">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container-custom flex-between py-4">
+            <a th:href="@{/}" class="navbar-brand"><i class="fas fa-leaf"></i> AfriShop</a>
+            <div class="flex gap-2">
+                <a th:href="@{/login?lang=en}" class="px-2 py-1 rounded-md text-sm font-medium bg-primary-orange text-white">EN</a>
+                <a th:href="@{/login?lang=fr}" class="px-2 py-1 rounded-md text-sm font-medium text-dark-brown hover:bg-warm-beige">FR</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Section -->
+    <div class="min-h-screen flex items-center justify-center py-12 px-4">
+        <div class="w-full max-w-md">
+            <!-- Card -->
+            <div class="card p-8">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold text-primary-orange mb-2" th:text="#{auth.login}">Login</h1>
+                    <p class="text-gray-dark" th:text="#{auth.already_have_account}">Already have an account?</p>
+                </div>
+
+                <!-- Error Message -->
+                <div class="alert alert-error mb-6" th:if="${error}" th:text="${error}">
+                    Error message
+                </div>
+
+                <!-- Success Message -->
+                <div class="alert alert-success mb-6" th:if="${success}" th:text="${success}">
+                    Success message
+                </div>
+
+                <!-- Login Form -->
+                <form th:action="@{/login}" method="post" class="space-y-6">
+                    <!-- Email Field -->
+                    <div>
+                        <label for="email" class="form-label" th:text="#{auth.email}">Email</label>
+                        <input type="email" id="email" name="email" class="form-control w-full" required
+                               th:placeholder="#{auth.email}">
+                        <span class="form-error" th:if="${emailError}" th:text="${emailError}"></span>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div>
+                        <label for="password" class="form-label" th:text="#{auth.password}">Password</label>
+                        <input type="password" id="password" name="password" class="form-control w-full" required
+                               th:placeholder="#{auth.password}">
+                        <span class="form-error" th:if="${passwordError}" th:text="${passwordError}"></span>
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="flex-between">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" name="rememberMe" class="w-4 h-4">
+                            <span class="text-sm text-gray-dark" th:text="#{auth.remember_me}">Remember Me</span>
+                        </label>
+                        <a th:href="@{/forgot-password}" class="text-sm text-primary-orange hover:text-primary-rust" th:text="#{auth.forgot_password}">Forgot Password?</a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-primary w-full" th:text="#{auth.sign_in}">Sign In</button>
+                </form>
+
+                <!-- Divider -->
+                <div class="flex items-center gap-4 my-8">
+                    <div class="flex-1 h-px bg-warm-beige"></div>
+                    <span class="text-gray-dark text-sm">OR</span>
+                    <div class="flex-1 h-px bg-warm-beige"></div>
+                </div>
+
+                <!-- Social Login -->
+                <div class="space-y-3">
+                    <button type="button" class="btn-outline w-full flex-center gap-2">
+                        <i class="fab fa-google"></i> <span>Google</span>
+                    </button>
+                    <button type="button" class="btn-outline w-full flex-center gap-2">
+                        <i class="fab fa-facebook-f"></i> <span>Facebook</span>
+                    </button>
+                </div>
+
+                <!-- Sign Up Link -->
+                <p class="text-center mt-8 text-gray-dark">
+                    <span th:text="#{auth.no_account}">Don't have an account?</span>
+                    <a th:href="@{/register}" class="text-primary-orange font-bold hover:text-primary-rust" th:text="#{auth.sign_up}">Sign Up</a>
+                </p>
+            </div>
+
+            <!-- Info Box -->
+            <div class="mt-8 bg-warm-beige p-6 rounded-lg">
+                <h3 class="font-bold text-primary-orange mb-3 flex items-center gap-2">
+                    <i class="fas fa-info-circle"></i> Demo Credentials
+                </h3>
+                <p class="text-sm text-gray-dark mb-2"><strong>Email:</strong> demo@example.com</p>
+                <p class="text-sm text-gray-dark"><strong>Password:</strong> Demo@123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-12">
+        <div class="container-custom">
+            <div class="border-t border-gray-700 pt-8 text-center text-sm text-light-cream">
+                <p th:text="'© 2024 AfriShop. ' + #{footer.copyright}">© 2024 AfriShop. All rights reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

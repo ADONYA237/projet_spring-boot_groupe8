@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{admin.products} + ' | AfriShop'">Products Management - AfriShop</title>
+    <link rel="stylesheet" th:href="@{/css/tailwind-custom.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="flex h-screen bg-light-cream">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-dark-brown text-light-cream shadow-lg">
+            <div class="p-6 border-b border-gray-700">
+                <h1 class="text-2xl font-bold text-primary-gold flex items-center gap-2">
+                    <i class="fas fa-leaf"></i> AfriShop Admin
+                </h1>
+            </div>
+
+            <nav class="p-4 space-y-2">
+                <a th:href="@{/admin}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-chart-line"></i> <span th:text="#{admin.dashboard}">Dashboard</span>
+                </a>
+                <a th:href="@{/admin/products}" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-orange text-white transition">
+                    <i class="fas fa-box"></i> <span th:text="#{admin.products}">Products</span>
+                </a>
+                <a th:href="@{/admin/categories}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-list"></i> <span th:text="#{admin.categories}">Categories</span>
+                </a>
+                <a th:href="@{/admin/orders}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-shopping-cart"></i> <span th:text="#{admin.orders}">Orders</span>
+                </a>
+                <a th:href="@{/admin/users}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-light-cream hover:bg-primary-orange transition">
+                    <i class="fas fa-users"></i> <span th:text="#{admin.users}">Users</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto">
+            <!-- Top Bar -->
+            <div class="bg-white border-b border-warm-beige p-6 flex-between shadow-sm">
+                <div>
+                    <h1 class="text-3xl font-bold text-primary-orange" th:text="#{admin.products}">Products</h1>
+                    <p class="text-gray-dark text-sm mt-1">Manage your product inventory</p>
+                </div>
+
+                <a th:href="@{/admin/products/new}" class="btn-primary flex items-center gap-2">
+                    <i class="fas fa-plus"></i> <span th:text="#{admin.add_product}">Add Product</span>
+                </a>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6">
+                <!-- Filters -->
+                <div class="card p-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <input type="text" placeholder="Search products..." class="form-control" th:placeholder="#{common.search}">
+                        <select class="form-control">
+                            <option value="">All Categories</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="home">Home & Living</option>
+                        </select>
+                        <select class="form-control">
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                        <button class="btn-primary" th:text="#{common.filter}">Filter</button>
+                    </div>
+                </div>
+
+                <!-- Products Table -->
+                <div class="card overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="bg-warm-beige border-b-2 border-primary-gold">
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown">
+                                        <input type="checkbox" class="w-4 h-4">
+                                    </th>
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown">Product</th>
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown" th:text="#{admin.product_category}">Category</th>
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown" th:text="#{admin.product_price}">Price</th>
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown" th:text="#{admin.product_stock}">Stock</th>
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown">Status</th>
+                                    <th class="text-left py-4 px-6 font-bold text-dark-brown">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-warm-beige hover:bg-light-cream transition" th:each="product : ${products}">
+                                    <td class="py-4 px-6">
+                                        <input type="checkbox" class="w-4 h-4">
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center gap-3">
+                                            <img th:src="${product.imageUrl}" alt="Product" class="w-12 h-12 rounded object-cover">
+                                            <div>
+                                                <p class="font-bold text-dark-brown" th:text="${product.name}">Product Name</p>
+                                                <p class="text-xs text-gray-dark" th:text="${product.sku}">SKU-001</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6 text-gray-dark" th:text="${product.category}">Category</td>
+                                    <td class="py-4 px-6 font-bold text-primary-orange" th:text="'$' + ${product.price}">$45.00</td>
+                                    <td class="py-4 px-6">
+                                        <span class="badge" th:classappend="${product.stock > 10} ? 'badge-success' : 'badge-warning'" th:text="${product.stock}">45</span>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="badge badge-primary" th:text="${product.status}">Active</span>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <div class="flex gap-2">
+                                            <a th:href="@{/admin/products/{id}(id=${product.id})}" class="text-primary-orange hover:text-primary-rust transition" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button class="text-red-500 hover:text-red-700 transition" title="Delete">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="bg-warm-beige p-4 flex-between">
+                        <p class="text-sm text-gray-dark">Showing <span class="font-bold">1-10</span> of <span class="font-bold">45</span> products</p>
+                        <div class="pagination">
+                            <a href="#" class="hover:bg-primary-orange hover:text-white">&laquo;</a>
+                            <a href="#" class="active">1</a>
+                            <a href="#" class="hover:bg-primary-orange hover:text-white">2</a>
+                            <a href="#" class="hover:bg-primary-orange hover:text-white">3</a>
+                            <a href="#" class="hover:bg-primary-orange hover:text-white">&raquo;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

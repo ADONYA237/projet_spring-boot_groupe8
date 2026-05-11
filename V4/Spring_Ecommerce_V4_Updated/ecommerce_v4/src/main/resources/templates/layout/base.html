@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} != null ? ${pageTitle} + ' | AfriShop' : 'AfriShop - Premium African Products'">AfriShop</title>
+    <link rel="stylesheet" th:href="@{/css/tailwind-custom.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container-custom flex-between py-4">
+            <div class="flex-center gap-8">
+                <a th:href="@{/}" class="navbar-brand">
+                    <i class="fas fa-leaf"></i> AfriShop
+                </a>
+                <div class="hidden md:flex gap-6">
+                    <a th:href="@{/}" class="nav-link" th:text="#{nav.home}">Home</a>
+                    <a th:href="@{/shop}" class="nav-link" th:text="#{nav.shop}">Shop</a>
+                    <a th:href="@{/about}" class="nav-link" th:text="#{nav.about}">About</a>
+                    <a th:href="@{/contact}" class="nav-link" th:text="#{nav.contact}">Contact</a>
+                </div>
+            </div>
+            
+            <div class="flex-center gap-4">
+                <!-- Language Selector -->
+                <div class="flex gap-2">
+                    <a th:href="@{?lang=en}" class="px-2 py-1 rounded-md text-sm font-medium"
+                       th:classappend="${#locale.language == 'en'} ? 'bg-primary-orange text-white' : 'text-dark-brown'">EN</a>
+                    <a th:href="@{?lang=fr}" class="px-2 py-1 rounded-md text-sm font-medium"
+                       th:classappend="${#locale.language == 'fr'} ? 'bg-primary-orange text-white' : 'text-dark-brown'">FR</a>
+                </div>
+                
+                <!-- Search -->
+                <form th:action="@{/shop}" method="get" class="hidden md:flex">
+                    <input type="text" name="search" placeholder="Search..." class="form-control rounded-l-md"
+                           th:placeholder="#{common.search}">
+                    <button type="submit" class="btn-primary rounded-r-md rounded-l-none">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+                
+                <!-- Cart Icon -->
+                <a th:href="@{/cart}" class="relative">
+                    <i class="fas fa-shopping-cart text-2xl text-primary-orange hover:text-primary-rust transition"></i>
+                    <span class="absolute -top-2 -right-2 bg-primary-orange text-white text-xs rounded-full w-5 h-5 flex-center"
+                          th:text="${cartCount} ?: '0'">0</span>
+                </a>
+                
+                <!-- Account Menu -->
+                <div class="relative group">
+                    <button class="flex-center gap-2 text-dark-brown hover:text-primary-orange transition">
+                        <i class="fas fa-user text-xl"></i>
+                        <span class="hidden md:inline" th:text="#{nav.account}">Account</span>
+                    </button>
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg hidden group-hover:block z-50">
+                        <a th:if="${#authentication != null and #authentication.isAuthenticated()}"
+                           th:href="@{/account/profile}" class="block px-4 py-2 text-dark-brown hover:bg-warm-beige"
+                           th:text="#{account.my_account}">My Account</a>
+                        <a th:if="${#authentication != null and #authentication.isAuthenticated()}"
+                           th:href="@{/account/orders}" class="block px-4 py-2 text-dark-brown hover:bg-warm-beige"
+                           th:text="#{account.orders}">Orders</a>
+                        <a th:if="${#authentication != null and #authentication.isAuthenticated()}"
+                           th:href="@{/account/settings}" class="block px-4 py-2 text-dark-brown hover:bg-warm-beige"
+                           th:text="#{account.settings}">Settings</a>
+                        <hr class="my-2">
+                        <a th:if="${#authentication != null and #authentication.isAuthenticated()}"
+                           th:href="@{/logout}" class="block px-4 py-2 text-dark-brown hover:bg-warm-beige"
+                           th:text="#{nav.logout}">Logout</a>
+                        <a th:if="${#authentication == null or !#authentication.isAuthenticated()}"
+                           th:href="@{/login}" class="block px-4 py-2 text-dark-brown hover:bg-warm-beige"
+                           th:text="#{nav.login}">Login</a>
+                        <a th:if="${#authentication == null or !#authentication.isAuthenticated()}"
+                           th:href="@{/register}" class="block px-4 py-2 text-dark-brown hover:bg-warm-beige"
+                           th:text="#{nav.register}">Register</a>
+                    </div>
+                </div>
+                
+                <!-- Admin Link -->
+                <a th:if="${#authentication != null and #authentication.isAuthenticated() and #authentication.principal.authorities.?[authority == 'ADMIN'].size() > 0}"
+                   th:href="@{/admin}" class="btn-primary text-sm" th:text="#{nav.admin}">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div th:replace="this :: content"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-custom">
+            <div class="grid-4 mb-8">
+                <!-- About Section -->
+                <div class="footer-section">
+                    <h3 th:text="#{footer.about_us}">About Us</h3>
+                    <p class="text-sm mb-4">AfriShop brings you the finest premium African products, crafted with tradition and passion.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-primary-gold hover:text-primary-orange transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-primary-gold hover:text-primary-orange transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-primary-gold hover:text-primary-orange transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-primary-gold hover:text-primary-orange transition">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="footer-section">
+                    <h3 th:text="#{nav.shop}">Shop</h3>
+                    <a th:href="@{/shop}" class="footer-link" th:text="#{nav.shop}">Shop</a>
+                    <a th:href="@{/shop?category=clothing}" class="footer-link">Clothing</a>
+                    <a th:href="@{/shop?category=accessories}" class="footer-link">Accessories</a>
+                    <a th:href="@{/shop?category=home}" class="footer-link">Home & Living</a>
+                </div>
+                
+                <!-- Support -->
+                <div class="footer-section">
+                    <h3 th:text="#{nav.contact}">Support</h3>
+                    <a th:href="@{/contact}" class="footer-link" th:text="#{footer.contact_us}">Contact Us</a>
+                    <a th:href="@{/faq}" class="footer-link" th:text="#{footer.faq}">FAQ</a>
+                    <a th:href="@{/shipping}" class="footer-link" th:text="#{footer.shipping_returns}">Shipping & Returns</a>
+                </div>
+                
+                <!-- Legal -->
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <a th:href="@{/privacy}" class="footer-link" th:text="#{footer.privacy_policy}">Privacy Policy</a>
+                    <a th:href="@{/terms}" class="footer-link" th:text="#{footer.terms_conditions}">Terms & Conditions</a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-8 text-center text-sm text-light-cream">
+                <p th:text="'© 2024 AfriShop. ' + #{footer.copyright}">© 2024 AfriShop. All rights reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

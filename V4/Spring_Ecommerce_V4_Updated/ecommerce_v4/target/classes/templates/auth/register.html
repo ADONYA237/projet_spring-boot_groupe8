@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{auth.register} + ' | AfriShop'">Register - AfriShop</title>
+    <link rel="stylesheet" th:href="@{/css/tailwind-custom.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light-cream">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container-custom flex-between py-4">
+            <a th:href="@{/}" class="navbar-brand"><i class="fas fa-leaf"></i> AfriShop</a>
+            <div class="flex gap-2">
+                <a th:href="@{/register?lang=en}" class="px-2 py-1 rounded-md text-sm font-medium bg-primary-orange text-white">EN</a>
+                <a th:href="@{/register?lang=fr}" class="px-2 py-1 rounded-md text-sm font-medium text-dark-brown hover:bg-warm-beige">FR</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Registration Section -->
+    <div class="min-h-screen flex items-center justify-center py-12 px-4">
+        <div class="w-full max-w-md">
+            <!-- Card -->
+            <div class="card p-8">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold text-primary-orange mb-2" th:text="#{auth.register}">Register</h1>
+                    <p class="text-gray-dark" th:text="#{auth.create_account}">Create an Account</p>
+                </div>
+
+                <!-- Error Message -->
+                <div class="alert alert-error mb-6" th:if="${error}" th:text="${error}">
+                    Error message
+                </div>
+
+                <!-- Success Message -->
+                <div class="alert alert-success mb-6" th:if="${success}" th:text="${success}">
+                    Success message
+                </div>
+
+                <!-- Registration Form -->
+                <form th:action="@{/register}" method="post" class="space-y-4" onsubmit="return validateForm(event)">
+                    <!-- First Name Field -->
+                    <div>
+                        <label for="firstName" class="form-label" th:text="#{auth.first_name}">First Name</label>
+                        <input type="text" id="firstName" name="firstName" class="form-control w-full" required
+                               th:placeholder="#{auth.first_name}">
+                        <span class="form-error" th:if="${firstNameError}" th:text="${firstNameError}"></span>
+                    </div>
+
+                    <!-- Last Name Field -->
+                    <div>
+                        <label for="lastName" class="form-label" th:text="#{auth.last_name}">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" class="form-control w-full" required
+                               th:placeholder="#{auth.last_name}">
+                        <span class="form-error" th:if="${lastNameError}" th:text="${lastNameError}"></span>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div>
+                        <label for="email" class="form-label" th:text="#{auth.email}">Email</label>
+                        <input type="email" id="email" name="email" class="form-control w-full" required
+                               th:placeholder="#{auth.email}">
+                        <span class="form-error" th:if="${emailError}" th:text="${emailError}"></span>
+                    </div>
+
+                    <!-- Phone Field -->
+                    <div>
+                        <label for="phone" class="form-label" th:text="#{auth.phone}">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" class="form-control w-full" required
+                               th:placeholder="#{auth.phone}">
+                        <span class="form-error" th:if="${phoneError}" th:text="${phoneError}"></span>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div>
+                        <label for="password" class="form-label" th:text="#{auth.password}">Password</label>
+                        <input type="password" id="password" name="password" class="form-control w-full" required
+                               th:placeholder="#{auth.password}">
+                        <span class="form-error" th:if="${passwordError}" th:text="${passwordError}"></span>
+                        <p class="text-xs text-gray-dark mt-1">Min 8 characters, 1 uppercase, 1 number, 1 special char</p>
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div>
+                        <label for="confirmPassword" class="form-label" th:text="#{auth.confirm_password}">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control w-full" required
+                               th:placeholder="#{auth.confirm_password}">
+                        <span class="form-error" id="passwordMismatchError"></span>
+                    </div>
+
+                    <!-- Terms & Conditions -->
+                    <label class="flex items-start gap-2 cursor-pointer">
+                        <input type="checkbox" name="terms" class="w-4 h-4 mt-1" required>
+                        <span class="text-sm text-gray-dark">
+                            I agree to the <a href="#" class="text-primary-orange hover:text-primary-rust">Terms & Conditions</a> and <a href="#" class="text-primary-orange hover:text-primary-rust">Privacy Policy</a>
+                        </span>
+                    </label>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-primary w-full mt-6" th:text="#{auth.sign_up}">Sign Up</button>
+                </form>
+
+                <!-- Divider -->
+                <div class="flex items-center gap-4 my-8">
+                    <div class="flex-1 h-px bg-warm-beige"></div>
+                    <span class="text-gray-dark text-sm">OR</span>
+                    <div class="flex-1 h-px bg-warm-beige"></div>
+                </div>
+
+                <!-- Social Registration -->
+                <div class="space-y-3">
+                    <button type="button" class="btn-outline w-full flex-center gap-2">
+                        <i class="fab fa-google"></i> <span>Google</span>
+                    </button>
+                    <button type="button" class="btn-outline w-full flex-center gap-2">
+                        <i class="fab fa-facebook-f"></i> <span>Facebook</span>
+                    </button>
+                </div>
+
+                <!-- Login Link -->
+                <p class="text-center mt-8 text-gray-dark">
+                    <span th:text="#{auth.already_have_account}">Already have an account?</span>
+                    <a th:href="@{/login}" class="text-primary-orange font-bold hover:text-primary-rust" th:text="#{auth.sign_in}">Sign In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-12">
+        <div class="container-custom">
+            <div class="border-t border-gray-700 pt-8 text-center text-sm text-light-cream">
+                <p th:text="'© 2024 AfriShop. ' + #{footer.copyright}">© 2024 AfriShop. All rights reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/main.js}"></script>
+    <script>
+        function validateForm(event) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const passwordMismatchError = document.getElementById('passwordMismatchError');
+
+            if (password !== confirmPassword) {
+                passwordMismatchError.textContent = 'Passwords do not match';
+                event.preventDefault();
+                return false;
+            }
+
+            passwordMismatchError.textContent = '';
+            return true;
+        }
+    </script>
+</body>
+</html>

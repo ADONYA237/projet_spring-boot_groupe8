@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{app.name}">AfriShop</title>
+    <link rel="stylesheet" th:href="@{/css/tailwind-custom.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container-custom flex-between py-4">
+            <div class="flex-center gap-8">
+                <a th:href="@{/}" class="navbar-brand">
+                    <i class="fas fa-leaf"></i> AfriShop
+                </a>
+                <div class="hidden md:flex gap-6">
+                    <a th:href="@{/}" class="nav-link active" th:text="#{nav.home}">Home</a>
+                    <a th:href="@{/shop}" class="nav-link" th:text="#{nav.shop}">Shop</a>
+                    <a th:href="@{/about}" class="nav-link" th:text="#{nav.about}">About</a>
+                    <a th:href="@{/contact}" class="nav-link" th:text="#{nav.contact}">Contact</a>
+                </div>
+            </div>
+            
+            <div class="flex-center gap-4">
+                <!-- Language Selector -->
+                <div class="flex gap-2">
+                    <a th:href="@{/?lang=en}" class="px-2 py-1 rounded-md text-sm font-medium bg-primary-orange text-white">EN</a>
+                    <a th:href="@{/?lang=fr}" class="px-2 py-1 rounded-md text-sm font-medium text-dark-brown hover:bg-warm-beige">FR</a>
+                </div>
+                
+                <!-- Search -->
+                <form th:action="@{/shop}" method="get" class="hidden md:flex">
+                    <input type="text" name="search" placeholder="Search..." class="form-control rounded-l-md"
+                           th:placeholder="#{common.search}">
+                    <button type="submit" class="btn-primary rounded-r-md rounded-l-none">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+                
+                <!-- Cart Icon -->
+                <a th:href="@{/cart}" class="relative">
+                    <i class="fas fa-shopping-cart text-2xl text-primary-orange hover:text-primary-rust transition"></i>
+                    <span class="absolute -top-2 -right-2 bg-primary-orange text-white text-xs rounded-full w-5 h-5 flex-center cart-count">0</span>
+                </a>
+                
+                <!-- Account Menu -->
+                <div class="relative group">
+                    <button class="flex-center gap-2 text-dark-brown hover:text-primary-orange transition">
+                        <i class="fas fa-user text-xl"></i>
+                    </button>
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg hidden group-hover:block z-50">
+                        <a th:href="@{/login}" class="block px-4 py-2 text-dark-brown hover:bg-warm-beige" th:text="#{nav.login}">Login</a>
+                        <a th:href="@{/register}" class="block px-4 py-2 text-dark-brown hover:bg-warm-beige" th:text="#{nav.register}">Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-primary-orange to-primary-rust py-20 text-white">
+        <div class="container-custom text-center fade-in">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4" th:text="#{home.welcome}">Welcome to AfriShop</h1>
+            <p class="text-xl mb-8" th:text="#{app.tagline}">Premium African Products</p>
+            <a th:href="@{/shop}" class="btn-primary bg-white text-primary-orange hover:bg-warm-beige">
+                <i class="fas fa-shopping-bag mr-2"></i> <span th:text="#{nav.shop}">Shop Now</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="section-padding">
+        <div class="container-custom">
+            <h2 class="text-4xl font-bold text-center mb-12 text-primary-orange" th:text="#{home.featured}">Featured Products</h2>
+            
+            <div class="grid-4">
+                <!-- Product Card 1 -->
+                <div class="product-card fade-in">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/300x250?text=Product+1" alt="Product" class="product-image">
+                        <span class="product-badge">-20%</span>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold text-dark-brown mb-2">Premium Kente Cloth</h3>
+                        <p class="text-sm text-gray-dark mb-3">Authentic handwoven fabric from Ghana</p>
+                        <div class="flex-between mb-4">
+                            <div>
+                                <span class="product-price">$45.00</span>
+                                <span class="product-old-price ml-2">$56.25</span>
+                            </div>
+                            <div class="flex gap-1">
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star-half-alt text-accent-warm"></i>
+                            </div>
+                        </div>
+                        <button class="btn-primary w-full add-to-cart-btn" data-product-id="1" th:text="#{common.add_to_cart}">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product Card 2 -->
+                <div class="product-card fade-in">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/300x250?text=Product+2" alt="Product" class="product-image">
+                        <span class="product-badge">New</span>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold text-dark-brown mb-2">Shea Butter Collection</h3>
+                        <p class="text-sm text-gray-dark mb-3">100% natural and organic</p>
+                        <div class="flex-between mb-4">
+                            <div>
+                                <span class="product-price">$28.00</span>
+                            </div>
+                            <div class="flex gap-1">
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star text-accent-warm"></i>
+                            </div>
+                        </div>
+                        <button class="btn-primary w-full add-to-cart-btn" data-product-id="2" th:text="#{common.add_to_cart}">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product Card 3 -->
+                <div class="product-card fade-in">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/300x250?text=Product+3" alt="Product" class="product-image">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold text-dark-brown mb-2">Beaded Jewelry Set</h3>
+                        <p class="text-sm text-gray-dark mb-3">Traditional African craftsmanship</p>
+                        <div class="flex-between mb-4">
+                            <div>
+                                <span class="product-price">$35.00</span>
+                            </div>
+                            <div class="flex gap-1">
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star text-accent-warm"></i>
+                            </div>
+                        </div>
+                        <button class="btn-primary w-full add-to-cart-btn" data-product-id="3" th:text="#{common.add_to_cart}">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product Card 4 -->
+                <div class="product-card fade-in">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/300x250?text=Product+4" alt="Product" class="product-image">
+                        <span class="product-badge">-15%</span>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold text-dark-brown mb-2">Wooden Mask Art</h3>
+                        <p class="text-sm text-gray-dark mb-3">Hand-carved authentic piece</p>
+                        <div class="flex-between mb-4">
+                            <div>
+                                <span class="product-price">$62.00</span>
+                                <span class="product-old-price ml-2">$73.00</span>
+                            </div>
+                            <div class="flex gap-1">
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star text-accent-warm"></i>
+                                <i class="fas fa-star-half-alt text-accent-warm"></i>
+                            </div>
+                        </div>
+                        <button class="btn-primary w-full add-to-cart-btn" data-product-id="4" th:text="#{common.add_to_cart}">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="section-padding bg-warm-beige">
+        <div class="container-custom">
+            <h2 class="text-4xl font-bold text-center mb-12 text-primary-orange" th:text="#{home.categories}">Shop by Category</h2>
+            
+            <div class="grid-3">
+                <div class="card text-center p-8 hover:shadow-lg transition">
+                    <i class="fas fa-shirt text-5xl text-primary-orange mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-2 text-dark-brown">Clothing</h3>
+                    <p class="text-gray-dark mb-4">Authentic African fashion</p>
+                    <a th:href="@{/shop?category=clothing}" class="btn-secondary">Browse</a>
+                </div>
+
+                <div class="card text-center p-8 hover:shadow-lg transition">
+                    <i class="fas fa-ring text-5xl text-primary-orange mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-2 text-dark-brown">Accessories</h3>
+                    <p class="text-gray-dark mb-4">Unique handcrafted pieces</p>
+                    <a th:href="@{/shop?category=accessories}" class="btn-secondary">Browse</a>
+                </div>
+
+                <div class="card text-center p-8 hover:shadow-lg transition">
+                    <i class="fas fa-home text-5xl text-primary-orange mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-2 text-dark-brown">Home & Living</h3>
+                    <p class="text-gray-dark mb-4">Beautiful home décor items</p>
+                    <a th:href="@{/shop?category=home}" class="btn-secondary">Browse</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="section-padding bg-primary-rust text-white">
+        <div class="container-custom text-center">
+            <h2 class="text-3xl font-bold mb-4" th:text="#{home.newsletter}">Subscribe to Our Newsletter</h2>
+            <p class="mb-8 text-lg" th:text="#{home.newsletter_desc}">Get exclusive offers and updates</p>
+            
+            <form class="flex gap-2 max-w-md mx-auto">
+                <input type="email" placeholder="Enter your email" class="form-control flex-1" required>
+                <button type="submit" class="btn-primary bg-primary-gold hover:bg-accent-warm">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section-padding">
+        <div class="container-custom">
+            <h2 class="text-4xl font-bold text-center mb-12 text-primary-orange" th:text="#{home.testimonials}">What Our Customers Say</h2>
+            
+            <div class="grid-3">
+                <div class="card p-6">
+                    <div class="flex gap-1 mb-4">
+                        <i class="fas fa-star text-accent-warm"></i>
+                        <i class="fas fa-star text-accent-warm"></i>
+                        <i class="fas fa-star text-accent-warm"></i>
+                        <i class="fas fa-star text-accent-warm"></i>
+                        <i class="fas fa-star text-accent-warm"></i>
+                    </div>
+                    <p class="text-gray-dark mb-4">"Amazing quality products! The Kente cloth is absolutely stunning and arrived quickly. Highly recommend AfriShop!"</p>
+                    <p class="font-bold text-primary-orange">- Sarah M.</p>
+                </div>
+
+                <div class="card p-6">
+                    <div class="flex gap-1 mb-4">
+                        <i class="fas fa-star text-accent-warm"></i>
+                        <i class="fas fa-star text-accent-warm"></i>
+                        <i class="fas fa-star text-accent-warm"></i>
+                        <i class="fas fa-star text-accent-warm"></i>
+                        <i class="fas fa-star text-accent-warm"></i>
+                    </div>
+                    <p class="text-gray-dark mb-4">"Love supporting authentic African artisans. The shea butter is incredible and my skin has never felt better!"</p>
+                    <p class="font-bold text-primary-orange">- James K.</p>
+                </div>
+
+                <div class="card p-6">
+                    <div class="flex gap-1 mb-4">
+                        <i class="fas fa-star text-accent-warm"></i>
+                        <i class="fas fa-star text-accent-warm"></i>
+                        <i class="fas fa-star text-accent-warm"></i>
+                        <i class="fas fa-star text-accent-warm"></i>
+                        <i class="fas fa-star-half-alt text-accent-warm"></i>
+                    </div>
+                    <p class="text-gray-dark mb-4">"Great customer service and beautiful products. Will definitely be ordering again soon!"</p>
+                    <p class="font-bold text-primary-orange">- Emily R.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-custom">
+            <div class="grid-4 mb-8">
+                <div class="footer-section">
+                    <h3 th:text="#{footer.about_us}">About Us</h3>
+                    <p class="text-sm mb-4">AfriShop brings you the finest premium African products, crafted with tradition and passion.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-primary-gold hover:text-primary-orange transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-primary-gold hover:text-primary-orange transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-primary-gold hover:text-primary-orange transition"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 th:text="#{nav.shop}">Shop</h3>
+                    <a th:href="@{/shop}" class="footer-link" th:text="#{nav.shop}">Shop</a>
+                    <a href="#" class="footer-link">Clothing</a>
+                    <a href="#" class="footer-link">Accessories</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 th:text="#{nav.contact}">Support</h3>
+                    <a th:href="@{/contact}" class="footer-link" th:text="#{footer.contact_us}">Contact Us</a>
+                    <a href="#" class="footer-link" th:text="#{footer.faq}">FAQ</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <a href="#" class="footer-link" th:text="#{footer.privacy_policy}">Privacy Policy</a>
+                    <a href="#" class="footer-link" th:text="#{footer.terms_conditions}">Terms & Conditions</a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-8 text-center text-sm text-light-cream">
+                <p th:text="'© 2024 AfriShop. ' + #{footer.copyright}">© 2024 AfriShop. All rights reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>
